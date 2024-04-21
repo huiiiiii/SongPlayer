@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as Tone from 'tone';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   const [selectedSong, setSelectedSong] = useState('');
   const [player, setPlayer] = useState(null);
   const [audioContextStarted, setAudioContextStarted] = useState(false);
+  const [pitchShift, setPitchShift] = useState(null);
 
   // Starte den Audio-Kontext, falls nicht bereits gestartet
   const startAudioContextIfNeeded = () => {
@@ -41,6 +42,11 @@ function App() {
     }
     setPlayer(newPlayer);
     console.log("Load song", song);
+
+    // Erstellen des PitchShift-Effekts und Verbinden mit dem Player
+    const newPitchShift = new Tone.PitchShift().toDestination();
+    newPlayer.connect(newPitchShift);
+    setPitchShift(newPitchShift);
   };
 
   // Funktion zum Ändern der Geschwindigkeit
@@ -67,8 +73,8 @@ function App() {
   const handlePitchChange = (e) => {
     const newPitch = parseFloat(e.target.value);
     setPitch(newPitch);
-    if (player) {
-      player.detune.value = newPitch * 100;
+    if (pitchShift) {
+      pitchShift.pitch = newPitch;
     }
     startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
   };
