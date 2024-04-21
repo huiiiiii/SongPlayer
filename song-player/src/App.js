@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import * as Tone from 'tone';
 import './App.css';
+import Slider from './Slider';
+import SongSelection from './SongSelection';
+import VolumeSlider from './VolumeSlider';
 
 function App() {
     const [speed, setSpeed] = useState(1);
@@ -16,7 +19,7 @@ function App() {
         if (!audioContextStarted) {
             Tone.start();
             setAudioContextStarted(true);
-            console.log("AudioContext started");
+            console.log('AudioContext started');
         }
     };
 
@@ -26,10 +29,10 @@ function App() {
         const newPlayer = new Tone.Player({
             url: audioFile,
             onload: () => {
-                console.log("Buffer loaded");
+                console.log('Buffer loaded');
                 startAudioContextIfNeeded(); // Starte den Audio-Kontext, wenn der Buffer geladen ist
                 newPlayer.start();
-            }
+            },
         }).toDestination();
         return newPlayer;
     };
@@ -42,7 +45,7 @@ function App() {
             player.dispose(); // Alten Player entsorgen, um Speicherleck zu vermeiden
         }
         setPlayer(newPlayer);
-        console.log("Load song", song);
+        console.log('Load song', song);
 
         // Erstellen des PitchShift-Effekts und Verbinden mit dem Player
         const newPitchShift = new Tone.PitchShift().toDestination();
@@ -59,7 +62,6 @@ function App() {
         newPlayer.playbackRate = randomSpeed;
         newPitchShift.pitch = randomPitch;
     };
-
 
     // Funktion zum Ändern der Geschwindigkeit
     const handleSpeedChange = (e) => {
@@ -94,59 +96,10 @@ function App() {
     return (
         <div className="container">
             <h1>Welches Lied wird hier abgespielt?</h1>
-            <div className="inputFieldWrapper">
-                <label htmlFor="speedSlider" className="inputFieldLabel">Geschwindigkeit:</label>
-                <input
-                    id="speedSlider"
-                    className="inputField"
-                    type="range"
-                    min="0.5"
-                    max="2"
-                    step="0.1"
-                    value={speed}
-                    onChange={handleSpeedChange}
-                />
-            </div>
-            <div className="inputFieldWrapper">
-                <label htmlFor="pitchSlider" className="inputFieldLabel">Tonhöhe:</label>
-                <input
-                    id="pitchSlider"
-                    className="inputField"
-                    type="range"
-                    min="-12"
-                    max="12"
-                    step="1"
-                    value={pitch}
-                    onChange={handlePitchChange}
-                />
-            </div>
-            <div className="inputFieldWrapper">
-                <label htmlFor="volumeSlider" className="inputFieldLabel">Lautstärke:</label>
-                <input
-                    id="volumeSlider"
-                    className="inputField"
-                    type="range"
-                    min="-48" // Mindestwert auf -48 setzen
-                    max="12"
-                    step="1"
-                    value={volume}
-                    onChange={handleVolumeChange}
-                />
-            </div>
-            <div>
-                <label htmlFor="songSelect">Lied auswählen: </label>
-                <select
-                    id="songSelect"
-                    className="selectField"
-                    value={selectedSong}
-                    onChange={(e) => loadSong(e.target.value)}
-                >
-                    <option value="">Auswählen</option>
-                    <option value="song1.mp3">Lied 1</option>
-                    <option value="song2.mp3">Lied 2</option>
-                    <option value="song3.mp3">Lied 3</option>
-                </select>
-            </div>
+            <Slider label="Geschwindigkeit" value={speed} onChange={handleSpeedChange} min={0.5} max={2} step={0.1} />
+            <Slider label="Tonhöhe" value={pitch} onChange={handlePitchChange} min={-12} max={12} step={1} />
+            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange} />
+            <SongSelection selectedSong={selectedSong} loadSong={loadSong} />
         </div>
     );
 }
