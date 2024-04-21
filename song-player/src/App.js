@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import * as Tone from 'tone';
 import './App.css';
 import Slider from './Slider';
@@ -7,8 +7,12 @@ import VolumeSlider from './VolumeSlider';
 
 function App() {
     const [speed, setSpeed] = useState(1);
-    const [volume, setVolume] = useState(0);
+    const [minSpeed, setMinSpeed] = useState(0.2);
+    const [maxSpeed, setMaxSpeed] = useState(2);
     const [pitch, setPitch] = useState(0);
+    const [minPitch, setMinPitch] = useState(-20);
+    const [maxPitch, setMaxPitch] = useState(20);
+    const [volume, setVolume] = useState(0);
     const [selectedSong, setSelectedSong] = useState('');
     const [player, setPlayer] = useState(null);
     const [audioContextStarted, setAudioContextStarted] = useState(false);
@@ -53,9 +57,18 @@ function App() {
         setPitchShift(newPitchShift);
 
         // Geschwindigkeit und Tonhöhe zufällig setzen
-        const randomSpeed = Math.random() * (2 - 0.5) + 0.5; // Zufällige Geschwindigkeit zwischen 0.5 und 2
-        const randomPitch = Math.floor(Math.random() * (24 + 1)) - 12; // Zufällige Tonhöhe zwischen -12 und 12
+        const minSpeed = Math.random(); // Mindestwert für Geschwindigkeit zwischen 0 und 1
+        setMinSpeed(minSpeed);
+        const maxSpeed = minSpeed + 2.5; // Maximalwert für Geschwindigkeit
+        setMaxSpeed(maxSpeed)
+        const randomSpeed = Math.random() * (maxSpeed - minSpeed) + minSpeed; // Zufällige Geschwindigkeit im Bereich
         setSpeed(randomSpeed);
+
+        const minPitch = Math.random() * (-20); // Mindestwert für Tonhöhe zwischen -20 und 0
+        setMinPitch(minPitch);
+        const maxPitch = minPitch + 20; // Maximalwert für Tonhöhe
+        setMaxPitch(maxPitch);
+        const randomPitch = Math.random() * (maxPitch - minPitch) + minPitch; // Zufällige Tonhöhe im Bereich
         setPitch(randomPitch);
 
         // Geschwindigkeit und Tonhöhe des neuen Players setzen
@@ -96,10 +109,12 @@ function App() {
     return (
         <div className="container">
             <h1>Welches Lied wird hier abgespielt?</h1>
-            <Slider label="Geschwindigkeit" value={speed} onChange={handleSpeedChange} min={0.5} max={2} step={0.1} />
-            <Slider label="Tonhöhe" value={pitch} onChange={handlePitchChange} min={-12} max={12} step={1} />
-            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange} />
-            <SongSelection selectedSong={selectedSong} loadSong={loadSong} />
+            <Slider label="Geschwindigkeit" value={speed} onChange={handleSpeedChange} min={minSpeed} max={maxSpeed}
+                    step={0.005}/>
+            <Slider label="Tonhöhe" value={pitch} onChange={handlePitchChange} min={minPitch} max={maxPitch}
+                    step={0.5}/>
+            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
+            <SongSelection selectedSong={selectedSong} loadSong={loadSong}/>
         </div>
     );
 }
