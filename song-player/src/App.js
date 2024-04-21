@@ -83,8 +83,8 @@ function App() {
   return (
       <div className="container">
         <h1>Welches Lied wird hier abgespielt?</h1>
-        <div>
-          <label htmlFor="speedSlider">Geschwindigkeit: </label>
+        <div className="inputFieldWrapper">
+          <label htmlFor="speedSlider" className="inputFieldLabel">Geschwindigkeit:</label>
           <input
               id="speedSlider"
               className="inputField"
@@ -96,8 +96,8 @@ function App() {
               onChange={handleSpeedChange}
           />
         </div>
-        <div>
-          <label htmlFor="volumeSlider">Lautstärke: </label>
+        <div className="inputFieldWrapper">
+          <label htmlFor="volumeSlider" className="inputFieldLabel">Lautstärke:</label>
           <input
               id="volumeSlider"
               className="inputField"
@@ -109,8 +109,8 @@ function App() {
               onChange={handleVolumeChange}
           />
         </div>
-        <div>
-          <label htmlFor="pitchSlider">Tonhöhe: </label>
+        <div className="inputFieldWrapper">
+          <label htmlFor="pitchSlider" className="inputFieldLabel">Tonhöhe:</label>
           <input
               id="pitchSlider"
               className="inputField"

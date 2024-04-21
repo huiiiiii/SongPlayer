@@ -2,37 +2,48 @@
   background-color: green;
   padding: 20px;
   color: yellow;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Zentrierung vertikal */
+  align-items: center; /* Zentrierung horizontal */
+  height: 100vh; /* 100% der Bildschirmhöhe */
+}
+
+.inputFieldWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px; /* Abstand zwischen den Eingabefeldern */
+}
+
+.inputFieldLabel {
+  margin-bottom: 5px; /* Abstand zwischen Label und Slider */
+}
+
+.inputField {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: yellow;
+  width: 50vw; /* Halbe Bildschirmbreite */
+  height: 20px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.inputField::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: darkgreen;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .selectField {
   background-color: yellow;
   color: green;
   border-color: yellow;
+  width: 25vw; /* Ein Viertel der Bildschirmbreite */
+  margin-top: 10px; /* Abstand über dem Dropdown-Menü */
 }
-
-.container {
-  background-color: green;
-  padding: 20px;
-  color: yellow;
-}
-
-.inputField {
-  -webkit-appearance: none; /* Remove default styles */
-  appearance: none;
-  background-color: yellow;
-  width: 100%; /* Full width */
-  height: 20px; /* Slider height */
-  border-radius: 5px; /* Slider handle border radius */
-  outline: none; /* Remove outline */
-}
-
-.inputField::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Remove default thumb appearance */
-  appearance: none;
-  width: 20px; /* Thumb width */
-  height: 20px; /* Thumb height */
-  background-color: darkgreen; /* Thumb color */
-  border-radius: 50%; /* Round thumb */
-  cursor: pointer; /* Cursor on hover */
-}
-
