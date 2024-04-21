@@ -7,6 +7,8 @@
   justify-content: center; /* Zentrierung vertikal */
   align-items: center; /* Zentrierung horizontal */
   height: 100vh; /* 100% der Bildschirmhöhe */
+  overflow-x: hidden; /* Scrollbalken am Rand ausblenden */
+  overflow-y: hidden; /* Scrollbalken am Rand ausblenden */
 }
 
 .inputFieldWrapper {
