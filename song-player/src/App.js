@@ -109,10 +109,22 @@ function App() {
     return (
         <div className="container">
             <h1>Welches Lied wird hier abgespielt?</h1>
-            <Slider label="Geschwindigkeit" value={speed} onChange={handleSpeedChange} min={minSpeed} max={maxSpeed}
-                    step={0.005}/>
-            <Slider label="Tonhöhe" value={pitch} onChange={handlePitchChange} min={minPitch} max={maxPitch}
-                    step={0.5}/>
+            <Slider
+                label="Geschwindigkeit"
+                value={speed}
+                onChange={handleSpeedChange}
+                min={minSpeed}
+                max={maxSpeed}
+                step={0.005}
+            />
+            <Slider
+                label="Tonhöhe"
+                value={pitch}
+                onChange={handlePitchChange}
+                min={minPitch}
+                max={maxPitch}
+                step={0.5}
+            />
             <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
             <SongSelection selectedSong={selectedSong} loadSong={loadSong}/>
         </div>

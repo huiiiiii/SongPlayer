@@ -15,6 +15,7 @@ const Slider = ({ label, value, onChange, min, max, step }) => {
                 step={step}
                 value={value}
                 onChange={onChange}
+                title=""
             />
         </div>
     );
