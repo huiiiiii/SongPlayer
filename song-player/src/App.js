@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as Tone from 'tone';
+import './App.css';
 
 function App() {
   const [speed, setSpeed] = useState(1);
@@ -80,12 +81,13 @@ function App() {
   };
 
   return (
-      <div>
-        <h1>Music Player</h1>
+      <div className="container">
+        <h1>Welches Lied wird hier abgespielt?</h1>
         <div>
-          <label htmlFor="speedSlider">Speed:</label>
+          <label htmlFor="speedSlider">Geschwindigkeit: </label>
           <input
               id="speedSlider"
+              className="inputField"
               type="range"
               min="0.5"
               max="2"
@@ -95,9 +97,10 @@ function App() {
           />
         </div>
         <div>
-          <label htmlFor="volumeSlider">Volume:</label>
+          <label htmlFor="volumeSlider">Lautstärke: </label>
           <input
               id="volumeSlider"
+              className="inputField"
               type="range"
               min="-12"
               max="12"
@@ -107,9 +110,10 @@ function App() {
           />
         </div>
         <div>
-          <label htmlFor="pitchSlider">Pitch:</label>
+          <label htmlFor="pitchSlider">Tonhöhe: </label>
           <input
               id="pitchSlider"
+              className="inputField"
               type="range"
               min="-12"
               max="12"
@@ -119,16 +123,17 @@ function App() {
           />
         </div>
         <div>
-          <label htmlFor="songSelect">Select a song:</label>
+          <label htmlFor="songSelect">Lied auswählen: </label>
           <select
               id="songSelect"
+              className="selectField"
               value={selectedSong}
               onChange={(e) => loadSong(e.target.value)}
           >
-            <option value="">Select</option>
-            <option value="song1.mp3">Song 1</option>
-            <option value="song2.mp3">Song 2</option>
-            <option value="song3.mp3">Song 3</option>
+            <option value="">Auswählen</option>
+            <option value="song1.mp3">Lied 1</option>
+            <option value="song2.mp3">Lied 2</option>
+            <option value="song3.mp3">Lied 3</option>
           </select>
         </div>
       </div>
