@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# Song Player
+
+Save the songs you want to play in directory public/songs 
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
