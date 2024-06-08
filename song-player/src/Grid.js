@@ -1,52 +1,8 @@
 // src/components/Grid.js
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PipeTile from './PipeTile';
 import './Grid.css';
-
-const initialGrid = [
-    [
-        {type: 't', rotation: 0}, {type: 'straight', rotation: 0}, {type: 't', rotation: 180}, {
-        type: 'straight',
-        rotation: 90
-    }, {type: 'elbow', rotation: 270}, {type: 't', rotation: 0}, {type: 'straight', rotation: 90}
-    ],
-    [
-        {type: 'elbow', rotation: 90}, {type: 'elbow', rotation: 180}, {type: 'elbow', rotation: 90}, {
-        type: 't',
-        rotation: 180
-    }, {type: 'elbow', rotation: 0}, {type: 'elbow', rotation: 0}, {type: 'straight', rotation: 0}
-    ],
-    [
-        {type: 't', rotation: 270}, {type: 'straight', rotation: 0}, {type: 'start', rotation: 0}, {
-        type: 'elbow',
-        rotation: 90
-    }, {type: 't', rotation: 0}, {type: 't', rotation: 0}, {type: 'straight', rotation: 0}
-    ],
-    [
-        {type: 'straight', rotation: 0}, {type: 'elbow', rotation: 180}, {type: 't', rotation: 90}, {
-        type: 'start',
-        rotation: 0
-    }, {type: 'elbow', rotation: 180}, {type: 'straight', rotation: 0}, {type: 't', rotation: 270}
-    ],
-    [
-        {type: 'elbow', rotation: 90}, {type: 't', rotation: 180}, {type: 't', rotation: 90}, {
-        type: 'elbow',
-        rotation: 0
-    }, {type: 'elbow', rotation: 180}, {type: 'elbow', rotation: 90}, {type: 't', rotation: 180}
-    ],
-    [
-        {type: 'straight', rotation: 90}, {type: 'straight', rotation: 0}, {type: 't', rotation: 270}, {
-        type: 'elbow',
-        rotation: 180
-    }, {type: 'straight', rotation: 90}, {type: 'straight', rotation: 0}, {type: 'elbow', rotation: 180}
-    ],
-    [
-        {type: 'elbow', rotation: 270}, {type: 'elbow', rotation: 90}, {type: 'straight', rotation: 0}, {
-        type: 't',
-        rotation: 270
-    }, {type: 'straight', rotation: 0}, {type: 'straight', rotation: 90}, {type: 'elbow', rotation: 90}
-    ],
-];
+import {initialGrid1} from "./InitialGrids";
 
 const pipeConnections = {
     'straight': {
@@ -98,7 +54,8 @@ const reverseDirection = {
 };
 
 const Grid = () => {
-    const [grid, setGrid] = useState(initialGrid);
+    const [grid, setGrid] = useState(initialGrid1);
+    const [solvedTilesInRow, setSolvedTilesInRow] = useState(Array(grid.length).fill(0));
 
     const getConnectedTiles = (grid, startX, startY) => {
         const numRows = grid.length;
@@ -142,12 +99,23 @@ const Grid = () => {
     function markConnectedTiles(newGrid) {
         const connectedTiles = getConnectedTiles(newGrid, 3, 3);
 
+        const amountSolvedTiles = Array(grid.length).fill(0)
+
         const coloredGrid = newGrid.map((row, rowIndex) =>
             row.map((tile, colIndex) => {
+                amountSolvedTiles[rowIndex] = connectedTiles[rowIndex][colIndex] ? amountSolvedTiles[rowIndex] + 1 : amountSolvedTiles[rowIndex];
                 return {type: tile.type, rotation: tile.rotation, isFilled: connectedTiles[rowIndex][colIndex]};
             })
         );
+
+        const numCols = newGrid[0].length;
+        const percentPerRow = amountSolvedTiles.map((row, _) => {
+                return (row / (numCols)) * 100;
+            }
+        );
         setGrid(coloredGrid);
+        console.log(percentPerRow);
+        setSolvedTilesInRow(percentPerRow);
     }
 
     // Call markConnectedTiles on component mount
