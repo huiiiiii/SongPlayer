@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import * as Tone from 'tone';
 import './App.css';
 import Slider from './Slider';
@@ -125,8 +125,10 @@ function App() {
                 max={maxPitch}
                 step={0.5}
             />
-            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
+            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange} />
             <SongSelection selectedSong={selectedSong} loadSong={loadSong}/>
+            <h1>Pipe Puzzle Game</h1>
+            <Grid />
         </div>
     );
 }
