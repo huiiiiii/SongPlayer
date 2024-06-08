@@ -109,7 +109,7 @@ function App() {
 
     return (
         <div className="container">
-            <h1>Welches Lied wird hier abgespielt?</h1>
+            {/*  <h1>Welches Lied wird hier abgespielt?</h1>
             <Slider
                 label="Geschwindigkeit"
                 value={speed}
@@ -127,7 +127,7 @@ function App() {
                 step={0.5}
             />
             <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange} />
-            <SongSelection selectedSong={selectedSong} loadSong={loadSong}/>
+            <SongSelection selectedSong={selectedSong} loadSong={loadSong}/> */}
             <h1>Pipe Puzzle Game</h1>
             <Grid />
         </div>

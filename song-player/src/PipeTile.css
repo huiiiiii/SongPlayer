@@ -30,6 +30,26 @@
 .end {
     background-image: url('../public/pictures/end.jpg');
 }
+/* Pipe styles filled*/
+.straight-filled {
+    background-image: url('../public/pictures/straight-filled.jpg');
+}
+
+.elbow-filled {
+    background-image: url('../public/pictures/l-filled.jpg');
+}
+
+.t-filled {
+    background-image: url('../public/pictures/t-filled.jpg');
+}
+
+.start-filled {
+    background-image: url('../public/pictures/start-filled.jpg');
+}
+
+.end-filled {
+    background-image: url('../public/pictures/end-filled.jpg');
+}
 
 /* Rotations */
 .rotate-0 {

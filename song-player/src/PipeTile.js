@@ -2,10 +2,11 @@
 import React from 'react';
 import './PipeTile.css';
 
-const PipeTile = ({ type, rotation, onClick }) => {
+const PipeTile = ({ type, rotation, onClick, isFilled = false }) => {
   const getPipeClass = () => {
     // Determine the CSS class based on type and rotation
-    return `${type} rotate-${rotation}`;
+    const filled = isFilled ? '-filled' : '';
+    return `${type}${filled} rotate-${rotation}`;
   };
 
   return (
