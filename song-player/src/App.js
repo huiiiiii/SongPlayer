@@ -4,6 +4,7 @@ import './App.css';
 import Slider from './Slider';
 import SongSelection from './SongSelection';
 import VolumeSlider from './VolumeSlider';
+import Grid from "./Grid";
 
 function App() {
     const [speed, setSpeed] = useState(1);
