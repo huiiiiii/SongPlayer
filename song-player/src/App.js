@@ -18,7 +18,6 @@ function App() {
         if (!audioContextStarted) {
             Tone.start();
             setAudioContextStarted(true);
-            console.log('AudioContext started');
         }
     };
 
@@ -27,7 +26,6 @@ function App() {
         const audioFile = process.env.PUBLIC_URL + '/songs/' + song;
         const newPlayer = new Tone.Player({
             url: audioFile, onload: () => {
-                console.log('Buffer loaded');
                 startAudioContextIfNeeded(); // Starte den Audio-Kontext, wenn der Buffer geladen ist
                 newPlayer.start();
             },
@@ -35,16 +33,22 @@ function App() {
         return newPlayer;
     };
 
-    // Funktion zum Ändern der Geschwindigkeit zwischen 0 und 1
+    // Funktion zum Ändern der Geschwindigkeit zwischen 0.2 und 1
     const executeSpeedChange = (percentCorrect) => {
         if (player) {
-            player.playbackRate = percentCorrect / 100;
+            const minSpeed = 0.2;
+            const maxSpeed = 1.0;
+            const range = maxSpeed - minSpeed;
+            player.playbackRate = minSpeed + (percentCorrect / 100) * range;
         }
     };
     // Funktion zum Ändern der Tonhöhe zwischen 0 und 20
     const executePitchChange = (percentCorrect) => {
         if (pitchShift) {
-            pitchShift.pitch = 20 - (percentCorrect / 5);
+            const minPitch = 0;
+            const maxPitch = 20;
+            const range = maxPitch - minPitch;
+            pitchShift.pitch = maxPitch - (percentCorrect / 100) * range;
         }
     };
     // ToDo weiter Funktion, die den Song verändert
@@ -91,7 +95,6 @@ function App() {
         }
 
         setPlayer(newPlayer);
-        console.log('Load song', song);
 
         // Erstellen des PitchShift-Effekts und Verbinden mit dem Player
         const newPitchShift = new Tone.PitchShift().toDestination();

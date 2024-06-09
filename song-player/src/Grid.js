@@ -2,7 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import PipeTile from './PipeTile';
 import './Grid.css';
-import {initialGrid1} from "./InitialGrids";
 
 const pipeConnections = {
     'straight': {
@@ -55,11 +54,21 @@ const reverseDirection = {
 
 //ToDo selectedGrid verwenden
 const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedTilesInRow}) => {
-    const [grid, setGrid] = useState(initialGrid1);
+    const [grid, setGrid] = useState(selectedGrid);
 
-    const getConnectedTiles = (grid, startX, startY) => {
-        const numRows = grid.length;
-        const numCols = grid[0].length;
+    // Call markConnectedTiles on component mount and on every change of selectedGrid from App.js
+    useEffect(() => {
+        if (selectedGrid.length > 0) {
+            console.log("set grid to", selectedGrid)
+            markConnectedTiles(selectedGrid);
+        } else {
+            setGrid([]);
+        }
+    }, [selectedGrid]);
+
+    const getConnectedTiles = (newGrid, startX, startY) => {
+        const numRows = newGrid.length;
+        const numCols = newGrid[0].length;
         const connected = Array.from({length: numRows}, () => Array(numCols).fill(false));
 
         // Helper function to perform DFS
@@ -69,7 +78,7 @@ const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedT
             }
 
             connected[x][y] = true; // Mark this tile as connected
-            const {type, rotation} = grid[x][y];
+            const {type, rotation} = newGrid[x][y];
 
             // Get the possible connections for this pipe type and rotation
             const possibleConnections = pipeConnections[type][rotation];
@@ -81,7 +90,7 @@ const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedT
 
                 // Check if the new coordinates are valid
                 if (newX >= 0 && newX < numRows && newY >= 0 && newY < numCols) {
-                    const neighborPipe = grid[newX][newY];
+                    const neighborPipe = newGrid[newX][newY];
                     const reverseDir = reverseDirection[direction];
 
                     // Check if the neighbor pipe has a matching connection
@@ -99,7 +108,7 @@ const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedT
     function markConnectedTiles(newGrid) {
         const connectedTiles = getConnectedTiles(newGrid, 3, 3);
 
-        const amountSolvedTiles = Array(grid.length).fill(0)
+        const amountSolvedTiles = Array(newGrid.length).fill(0)
 
         const coloredGrid = newGrid.map((row, rowIndex) =>
             row.map((tile, colIndex) => {
@@ -117,13 +126,7 @@ const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedT
         changeSolvedTilesInRow(percentPerRow);
     }
 
-    // Call markConnectedTiles on component mount
-    useEffect(() => {
-        markConnectedTiles(grid);
-    }, []);
-
     const rotatePipe = (x, y) => {
-        console.log(`click ${x}, ${y}`)
         const newGrid = grid.map((row, rowIndex) =>
             row.map((tile, colIndex) => {
                 if (rowIndex === x && colIndex === y) {
