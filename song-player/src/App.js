@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import * as Tone from 'tone';
 import './App.css';
-import Slider from './Slider';
-import SongSelection from './SongSelection';
+import LevelSelection from './LevelSelection';
 import VolumeSlider from './VolumeSlider';
 import Grid from "./Grid";
 
 function App() {
-    const [speed, setSpeed] = useState(1);
-    const [minSpeed, setMinSpeed] = useState(0.2);
-    const [maxSpeed, setMaxSpeed] = useState(2);
-    const [pitch, setPitch] = useState(0);
-    const [minPitch, setMinPitch] = useState(-20);
-    const [maxPitch, setMaxPitch] = useState(20);
     const [volume, setVolume] = useState(0);
     const [selectedSong, setSelectedSong] = useState('');
     const [player, setPlayer] = useState(null);
@@ -32,14 +25,55 @@ function App() {
     const createPlayer = (song) => {
         const audioFile = process.env.PUBLIC_URL + '/songs/' + song;
         const newPlayer = new Tone.Player({
-            url: audioFile,
-            onload: () => {
+            url: audioFile, onload: () => {
                 console.log('Buffer loaded');
                 startAudioContextIfNeeded(); // Starte den Audio-Kontext, wenn der Buffer geladen ist
                 newPlayer.start();
             },
         }).toDestination();
         return newPlayer;
+    };
+
+    // Funktion zum Ändern der Geschwindigkeit zwischen 0 und 1
+    const executeSpeedChange = (percentCorrect, myPlayer, myPitchShift) => {
+        myPlayer.playbackRate = percentCorrect / 100;
+    };
+    // Funktion zum Ändern der Tonhöhe zwischen 0 und 20
+    const executePitchChange = (percentCorrect, myPlayer, myPitchShift) => {
+        myPitchShift.pitch = 20 - (percentCorrect / 5);
+    };
+    // ToDo weiter Funktion, die den Song verändert
+    const executeFunction2 = (percentCorrect, myPlayer, myPitchShift) => {
+        console.log(`Function 2: ${percentCorrect}`);
+    };
+    // ToDo weiter Funktion, die den Song verändert
+    const executeFunction3 = (percentCorrect, myPlayer, myPitchShift) => {
+        console.log(`Function 3: ${percentCorrect}`);
+    };
+    // ToDo weiter Funktion, die den Song verändert
+    const executeFunction4 = (percentCorrect, myPlayer, myPitchShift) => {
+        console.log(`Function 4: ${percentCorrect}`);
+    };
+    // ToDo weiter Funktion, die den Song verändert
+    const executeFunction5 = (percentCorrect, myPlayer, myPitchShift) => {
+        console.log(`Function 5: ${percentCorrect}`);
+    };
+    // ToDo weiter Funktion, die den Song verändert
+    const executeFunction6 = (percentCorrect, myPlayer, myPitchShift) => {
+        console.log(`Function 6: ${percentCorrect}`);
+    };
+
+    // Erstelle ein Array von Funktionsreferenzen
+    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeFunction2, executeFunction3, executeFunction4, executeFunction5, executeFunction6];
+
+    // Funktion zum Ändern der Lautstärke
+    const handleVolumeChange = (e) => {
+        const newVolume = parseFloat(e.target.value);
+        setVolume(newVolume);
+        if (player) {
+            player.volume.value = newVolume;
+        }
+        startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
     };
 
     // Laden des ausgewählten Songs
@@ -57,81 +91,18 @@ function App() {
         newPlayer.connect(newPitchShift);
         setPitchShift(newPitchShift);
 
-        // Geschwindigkeit und Tonhöhe zufällig setzen
-        const minSpeed = Math.random(); // Mindestwert für Geschwindigkeit zwischen 0 und 1
-        setMinSpeed(minSpeed);
-        const maxSpeed = minSpeed + 2.5; // Maximalwert für Geschwindigkeit
-        setMaxSpeed(maxSpeed)
-        const randomSpeed = Math.random() * (maxSpeed - minSpeed) + minSpeed; // Zufällige Geschwindigkeit im Bereich
-        setSpeed(randomSpeed);
-
-        const minPitch = Math.random() * (-20); // Mindestwert für Tonhöhe zwischen -20 und 0
-        setMinPitch(minPitch);
-        const maxPitch = minPitch + 20; // Maximalwert für Tonhöhe
-        setMaxPitch(maxPitch);
-        const randomPitch = Math.random() * (maxPitch - minPitch) + minPitch; // Zufällige Tonhöhe im Bereich
-        setPitch(randomPitch);
-
-        // Geschwindigkeit und Tonhöhe des neuen Players setzen
-        newPlayer.playbackRate = randomSpeed;
-        newPitchShift.pitch = randomPitch;
-    };
-
-    // Funktion zum Ändern der Geschwindigkeit
-    const handleSpeedChange = (e) => {
-        const newSpeed = parseFloat(e.target.value);
-        setSpeed(newSpeed);
-        if (player) {
-            player.playbackRate = newSpeed;
-        }
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
+
+        // Funktionen zum Song anpassen ausführen ToDo 100 durch Prozent-Wert der Spalte ersetzen
+        functionsForSongManipulation.forEach((func) => func(100, newPlayer, newPitchShift));
     };
 
-    // Funktion zum Ändern der Lautstärke
-    const handleVolumeChange = (e) => {
-        const newVolume = parseFloat(e.target.value);
-        setVolume(newVolume);
-        if (player) {
-            player.volume.value = newVolume;
-        }
-        startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
-    };
-
-    // Funktion zum Ändern der Tonhöhe
-    const handlePitchChange = (e) => {
-        const newPitch = parseFloat(e.target.value);
-        setPitch(newPitch);
-        if (pitchShift) {
-            pitchShift.pitch = newPitch;
-        }
-        startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
-    };
-
-    return (
-        <div className="container">
-            {/*  <h1>Welches Lied wird hier abgespielt?</h1>
-            <Slider
-                label="Geschwindigkeit"
-                value={speed}
-                onChange={handleSpeedChange}
-                min={minSpeed}
-                max={maxSpeed}
-                step={0.005}
-            />
-            <Slider
-                label="Tonhöhe"
-                value={pitch}
-                onChange={handlePitchChange}
-                min={minPitch}
-                max={maxPitch}
-                step={0.5}
-            />
-            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange} />
-            <SongSelection selectedSong={selectedSong} loadSong={loadSong}/> */}
-            <h1>Pipe Puzzle Game</h1>
-            <Grid />
-        </div>
-    );
+    return (<div className="container">
+        <h1>Welches Lied wird hier abgespielt?</h1>
+        <Grid/>
+        <LevelSelection selectedSong={selectedSong} loadSong={loadSong}/>
+        <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
+    </div>);
 }
 
 export default App;

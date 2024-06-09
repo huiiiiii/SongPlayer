@@ -1,6 +1,6 @@
 .container {
   background-color: green;
-  padding: 20px;
+  padding: 0;
   color: yellow;
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@
   align-items: center; /* Zentrierung horizontal */
   height: 100vh; /* 100% der Bildschirmhöhe */
   overflow-x: hidden; /* Scrollbalken am Rand ausblenden */
-  overflow-y: hidden; /* Scrollbalken am Rand ausblenden */
+  overflow-y: auto; /* Scrollbalken am Rand ausblenden */
 }
 
 .inputFieldWrapper {
@@ -19,6 +19,7 @@
 }
 
 .inputFieldLabel {
+  margin-top: 20px; /* Abstand über dem Label */
   margin-bottom: 5px; /* Abstand zwischen Label und Slider */
 }
 
@@ -47,5 +48,5 @@
   color: green;
   border-color: yellow;
   width: 25vw; /* Ein Viertel der Bildschirmbreite */
-  margin-top: 10px; /* Abstand über dem Dropdown-Menü */
+  margin-top: 20px; /* Abstand über dem Dropdown-Menü */
 }

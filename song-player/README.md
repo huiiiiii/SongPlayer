@@ -1,6 +1,6 @@
 # Song Player
 
-Save the songs you want to play in directory public/songs and add the names in [`SongSelection.js`](./src/SongSelection.js) as option values.
+Save the songs you want to play in directory public/songs and add the names in [`SongSelection.js`](./src/LevelSelection.js) as option values.
 
 
 ## Getting Started with Create React App
