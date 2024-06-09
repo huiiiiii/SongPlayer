@@ -19,7 +19,7 @@ Welcome to the React Song Guessing Game! This game is similar to the classic Pip
 ## Setup
 
 Save the songs you want to play in the directory public/songs. 
-Add the names of the songs in  [`SongSelection.js`](./src/LevelSelection.js)  as option values.
+Add the names of the songs in  [`SongSelection.js`](./song-player/src/LevelSelection.js)  as option values.
 
 ## Getting Started with Create React App
 

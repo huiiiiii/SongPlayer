@@ -1,0 +1,71 @@
+/* src/components/PipeTile.css */
+.pipe-tile {
+    width: 50px;
+    height: 50px;
+    background-color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-size: cover; /* Ensures the image covers the entire tile */
+    background-position: center; /* Center the image within the tile */
+}
+
+/* Pipe styles */
+.straight {
+    background-image: url('../public/pictures/straight.png');
+}
+
+.elbow {
+    background-image: url('../public/pictures/l.png');
+}
+
+.t {
+    background-image: url('../public/pictures/t.png');
+}
+
+.start {
+    background-image: url('../public/pictures/start.png');
+}
+
+.end {
+    background-image: url('../public/pictures/end.png');
+}
+/* Pipe styles filled*/
+.straight-filled {
+    background-image: url('../public/pictures/straight-filled.png');
+}
+
+.elbow-filled {
+    background-image: url('../public/pictures/l-filled.png');
+}
+
+.t-filled {
+    background-image: url('../public/pictures/t-filled.png');
+}
+
+.start-filled {
+    background-image: url('../public/pictures/start-filled.png');
+}
+
+.end-filled {
+    background-image: url('../public/pictures/end-filled.png');
+}
+
+/* Rotations */
+.rotate-0 {
+    transform: rotate(0deg);
+}
+
+.rotate-90 {
+    transform: rotate(90deg);
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.rotate-270 {
+    transform: rotate(270deg);
+}

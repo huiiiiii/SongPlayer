@@ -1,19 +1,14 @@
 import React, {useState} from 'react';
 import * as Tone from 'tone';
 import './App.css';
-import Slider from './Slider';
-import SongSelection from './SongSelection';
+import LevelSelection from './LevelSelection';
 import VolumeSlider from './VolumeSlider';
+import Grid from "./Grid";
+
 
 function App() {
-    const [speed, setSpeed] = useState(1);
-    const [minSpeed, setMinSpeed] = useState(0.2);
-    const [maxSpeed, setMaxSpeed] = useState(2);
-    const [pitch, setPitch] = useState(0);
-    const [minPitch, setMinPitch] = useState(-20);
-    const [maxPitch, setMaxPitch] = useState(20);
     const [volume, setVolume] = useState(0);
-    const [selectedSong, setSelectedSong] = useState('');
+    const [selectedLevel, setSelectedLevel] = useState({id: 'default', song: '', grid: []});
     const [player, setPlayer] = useState(null);
     const [audioContextStarted, setAudioContextStarted] = useState(false);
     const [pitchShift, setPitchShift] = useState(null);
@@ -23,7 +18,6 @@ function App() {
         if (!audioContextStarted) {
             Tone.start();
             setAudioContextStarted(true);
-            console.log('AudioContext started');
         }
     };
 
@@ -31,9 +25,7 @@ function App() {
     const createPlayer = (song) => {
         const audioFile = process.env.PUBLIC_URL + '/songs/' + song;
         const newPlayer = new Tone.Player({
-            url: audioFile,
-            onload: () => {
-                console.log('Buffer loaded');
+            url: audioFile, onload: () => {
                 startAudioContextIfNeeded(); // Starte den Audio-Kontext, wenn der Buffer geladen ist
                 newPlayer.start();
             },
@@ -41,50 +33,47 @@ function App() {
         return newPlayer;
     };
 
-    // Laden des ausgewählten Songs
-    const loadSong = (song) => {
-        const newPlayer = createPlayer(song);
-        setSelectedSong(song);
+    // Funktion zum Ändern der Geschwindigkeit zwischen 0.2 und 1
+    const executeSpeedChange = (percentCorrect) => {
         if (player) {
-            player.dispose(); // Alten Player entsorgen, um Speicherleck zu vermeiden
+            const minSpeed = 0.2;
+            const maxSpeed = 1.0;
+            const range = maxSpeed - minSpeed;
+            player.playbackRate = minSpeed + (percentCorrect / 100) * range;
         }
-        setPlayer(newPlayer);
-        console.log('Load song', song);
-
-        // Erstellen des PitchShift-Effekts und Verbinden mit dem Player
-        const newPitchShift = new Tone.PitchShift().toDestination();
-        newPlayer.connect(newPitchShift);
-        setPitchShift(newPitchShift);
-
-        // Geschwindigkeit und Tonhöhe zufällig setzen
-        const minSpeed = Math.random(); // Mindestwert für Geschwindigkeit zwischen 0 und 1
-        setMinSpeed(minSpeed);
-        const maxSpeed = minSpeed + 2.5; // Maximalwert für Geschwindigkeit
-        setMaxSpeed(maxSpeed)
-        const randomSpeed = Math.random() * (maxSpeed - minSpeed) + minSpeed; // Zufällige Geschwindigkeit im Bereich
-        setSpeed(randomSpeed);
-
-        const minPitch = Math.random() * (-20); // Mindestwert für Tonhöhe zwischen -20 und 0
-        setMinPitch(minPitch);
-        const maxPitch = minPitch + 20; // Maximalwert für Tonhöhe
-        setMaxPitch(maxPitch);
-        const randomPitch = Math.random() * (maxPitch - minPitch) + minPitch; // Zufällige Tonhöhe im Bereich
-        setPitch(randomPitch);
-
-        // Geschwindigkeit und Tonhöhe des neuen Players setzen
-        newPlayer.playbackRate = randomSpeed;
-        newPitchShift.pitch = randomPitch;
+    };
+    // Funktion zum Ändern der Tonhöhe zwischen 0 und 20
+    const executePitchChange = (percentCorrect) => {
+        if (pitchShift) {
+            const minPitch = 0;
+            const maxPitch = 20;
+            const range = maxPitch - minPitch;
+            pitchShift.pitch = maxPitch - (percentCorrect / 100) * range;
+        }
+    };
+    // ToDo weitere Funktion, die den Song verändert
+    const executeFunction2 = (percentCorrect) => {
+        console.log(`Function 2: ${percentCorrect}`);
+    };
+    // ToDo weitere Funktion, die den Song verändert
+    const executeFunction3 = (percentCorrect) => {
+        console.log(`Function 3: ${percentCorrect}`);
+    };
+    // ToDo weitere Funktion, die den Song verändert
+    const executeFunction4 = (percentCorrect) => {
+        console.log(`Function 4: ${percentCorrect}`);
+    };
+    // ToDo weitere Funktion, die den Song verändert
+    const executeFunction5 = (percentCorrect) => {
+        console.log(`Function 5: ${percentCorrect}`);
+    };
+    // ToDo weitere Funktion, die den Song verändert
+    const executeFunction6 = (percentCorrect) => {
+        console.log(`Function 6: ${percentCorrect}`);
     };
 
-    // Funktion zum Ändern der Geschwindigkeit
-    const handleSpeedChange = (e) => {
-        const newSpeed = parseFloat(e.target.value);
-        setSpeed(newSpeed);
-        if (player) {
-            player.playbackRate = newSpeed;
-        }
-        startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
-    };
+    // Erstelle ein Array von Funktionsreferenzen
+    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeFunction2, executeFunction3, executeFunction4, executeFunction5, executeFunction6];
 
     // Funktion zum Ändern der Lautstärke
     const handleVolumeChange = (e) => {
@@ -96,39 +85,49 @@ function App() {
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
     };
 
-    // Funktion zum Ändern der Tonhöhe
-    const handlePitchChange = (e) => {
-        const newPitch = parseFloat(e.target.value);
-        setPitch(newPitch);
-        if (pitchShift) {
-            pitchShift.pitch = newPitch;
+    function loadSong(song) {
+        const newPlayer = createPlayer(song);
+        if (player) {
+            player.dispose(); // Alten Player entsorgen, um Speicherleck zu vermeiden
         }
+        if (pitchShift) {
+            pitchShift.dispose();// Alten Pitch Shift entsorgen, um Speicherleck zu vermeiden
+        }
+
+        setPlayer(newPlayer);
+
+        // Erstellen des PitchShift-Effekts und Verbinden mit dem Player
+        const newPitchShift = new Tone.PitchShift().toDestination();
+        newPlayer.connect(newPitchShift);
+        setPitchShift(newPitchShift);
+
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
+    }
+
+    // Laden des ausgewählten Songs
+    const loadLevel = (level) => {
+        setSelectedLevel(level);
+
+        const song = level.song;
+        loadSong(song)
     };
 
-    return (
-        <div className="container">
-            <h1>Welches Lied wird hier abgespielt?</h1>
-            <Slider
-                label="Geschwindigkeit"
-                value={speed}
-                onChange={handleSpeedChange}
-                min={minSpeed}
-                max={maxSpeed}
-                step={0.005}
-            />
-            <Slider
-                label="Tonhöhe"
-                value={pitch}
-                onChange={handlePitchChange}
-                min={minPitch}
-                max={maxPitch}
-                step={0.5}
-            />
-            <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
-            <SongSelection selectedSong={selectedSong} loadSong={loadSong}/>
-        </div>
-    );
+    // Funktionen zum Song anpassen ausführen
+    const changeSolvedTilesInRow = (solvedTilesInRow) => {
+        solvedTilesInRow.forEach((rowPercent, index) => {
+                if (functionsForSongManipulation.length >= index) {
+                    functionsForSongManipulation[index](rowPercent);
+                }
+            }
+        )
+    };
+
+    return (<div className="container">
+        <h1>Welches Lied wird hier abgespielt?</h1>
+        <Grid selectedGrid={selectedLevel.grid} changeSolvedTilesInRow={changeSolvedTilesInRow}/>
+        <LevelSelection selectedLevel={selectedLevel} loadLevel={loadLevel}/>
+        <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
+    </div>);
 }
 
 export default App;
