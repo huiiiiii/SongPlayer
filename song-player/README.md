@@ -1,7 +1,25 @@
 # Song Player
 
-Save the songs you want to play in directory public/songs and add the names in [`SongSelection.js`](./src/LevelSelection.js) as option values.
+Welcome to the React Song Guessing Game! This game is similar to the classic Pipes game, but with a musical twist. Your goal is to guess the song hidden within the grid by connecting the tiles.
 
+## Gameplay
+
+**Objective**: Guess the hidden song by connecting tiles on the grid.
+
+**Grid**: The game board consists of a 7x7 grid of tiles.
+
+**Tile Types**: straight, elbow, t, start, end
+
+**Tile Rotation**: Click on any tile to rotate it.
+
+**Audio Feedback**: As you connect more tiles, the hidden song will play more clearly. If tiles are not connected, effects like speed or pitch alteration will be applied to the song.
+
+![readme.png](readme.png)
+
+## Setup
+
+Save the songs you want to play in the directory public/songs. 
+Add the names of the songs in  [`SongSelection.js`](./src/LevelSelection.js)  as option values.
 
 ## Getting Started with Create React App
 
