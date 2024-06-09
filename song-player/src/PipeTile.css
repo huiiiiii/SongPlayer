@@ -8,47 +8,49 @@
     align-items: center;
     border: 1px solid #ddd;
     cursor: pointer;
+    background-size: cover; /* Ensures the image covers the entire tile */
+    background-position: center; /* Center the image within the tile */
 }
 
 /* Pipe styles */
 .straight {
-    background-image: url('../public/pictures/straight.jpg');
+    background-image: url('../public/pictures/straight.png');
 }
 
 .elbow {
-    background-image: url('../public/pictures/l.jpg');
+    background-image: url('../public/pictures/l.png');
 }
 
 .t {
-    background-image: url('../public/pictures/t.jpg');
+    background-image: url('../public/pictures/t.png');
 }
 
 .start {
-    background-image: url('../public/pictures/start.jpg');
+    background-image: url('../public/pictures/start.png');
 }
 
 .end {
-    background-image: url('../public/pictures/end.jpg');
+    background-image: url('../public/pictures/end.png');
 }
 /* Pipe styles filled*/
 .straight-filled {
-    background-image: url('../public/pictures/straight-filled.jpg');
+    background-image: url('../public/pictures/straight-filled.png');
 }
 
 .elbow-filled {
-    background-image: url('../public/pictures/l-filled.jpg');
+    background-image: url('../public/pictures/l-filled.png');
 }
 
 .t-filled {
-    background-image: url('../public/pictures/t-filled.jpg');
+    background-image: url('../public/pictures/t-filled.png');
 }
 
 .start-filled {
-    background-image: url('../public/pictures/start-filled.jpg');
+    background-image: url('../public/pictures/start-filled.png');
 }
 
 .end-filled {
-    background-image: url('../public/pictures/end-filled.jpg');
+    background-image: url('../public/pictures/end-filled.png');
 }
 
 /* Rotations */
