@@ -66,7 +66,7 @@ export const initialGrid1 = [
     ],
 ];
 
-// Du kannst hier weitere Grids definieren
+//ToDo Du kannst hier weitere Grids definieren
 export const initialGrid2 = [
     // ... (Ein anderes Grid-Szenario)
 ];

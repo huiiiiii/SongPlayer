@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import PipeTile, {directionOffsets, pipeConnections, reverseDirection} from './PipeTile';
 import './Grid.css';
 
-//ToDo selectedGrid verwenden
 const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedTilesInRow}) => {
     const [grid, setGrid] = useState(selectedGrid);
 

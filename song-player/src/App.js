@@ -51,23 +51,23 @@ function App() {
             pitchShift.pitch = maxPitch - (percentCorrect / 100) * range;
         }
     };
-    // ToDo weiter Funktion, die den Song verändert
+    // ToDo weitere Funktion, die den Song verändert
     const executeFunction2 = (percentCorrect) => {
         console.log(`Function 2: ${percentCorrect}`);
     };
-    // ToDo weiter Funktion, die den Song verändert
+    // ToDo weitere Funktion, die den Song verändert
     const executeFunction3 = (percentCorrect) => {
         console.log(`Function 3: ${percentCorrect}`);
     };
-    // ToDo weiter Funktion, die den Song verändert
+    // ToDo weitere Funktion, die den Song verändert
     const executeFunction4 = (percentCorrect) => {
         console.log(`Function 4: ${percentCorrect}`);
     };
-    // ToDo weiter Funktion, die den Song verändert
+    // ToDo weitere Funktion, die den Song verändert
     const executeFunction5 = (percentCorrect) => {
         console.log(`Function 5: ${percentCorrect}`);
     };
-    // ToDo weiter Funktion, die den Song verändert
+    // ToDo weitere Funktion, die den Song verändert
     const executeFunction6 = (percentCorrect) => {
         console.log(`Function 6: ${percentCorrect}`);
     };

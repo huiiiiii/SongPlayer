@@ -2,6 +2,7 @@ import React from 'react';
 import {initialGrid1, initialGrid2, initialGrid3} from "./InitialGrids";
 
 // Map the selected level to the corresponding level data
+//ToDo weitere songs und grids hinzufügen
 const levelData = {
     'default': { id: 'default', song: '', grid: [] },
     'level1': { id: 'level1', song: 'song1.mp3', grid: initialGrid1 },
