@@ -5,9 +5,10 @@ import LevelSelection from './LevelSelection';
 import VolumeSlider from './VolumeSlider';
 import Grid from "./Grid";
 
+
 function App() {
     const [volume, setVolume] = useState(0);
-    const [selectedSong, setSelectedSong] = useState('');
+    const [selectedLevel, setSelectedLevel] = useState({id: 'default', song: '', grid: []});
     const [player, setPlayer] = useState(null);
     const [audioContextStarted, setAudioContextStarted] = useState(false);
     const [pitchShift, setPitchShift] = useState(null);
@@ -35,31 +36,35 @@ function App() {
     };
 
     // Funktion zum Ändern der Geschwindigkeit zwischen 0 und 1
-    const executeSpeedChange = (percentCorrect, myPlayer, myPitchShift) => {
-        myPlayer.playbackRate = percentCorrect / 100;
+    const executeSpeedChange = (percentCorrect) => {
+        if (player) {
+            player.playbackRate = percentCorrect / 100;
+        }
     };
     // Funktion zum Ändern der Tonhöhe zwischen 0 und 20
-    const executePitchChange = (percentCorrect, myPlayer, myPitchShift) => {
-        myPitchShift.pitch = 20 - (percentCorrect / 5);
+    const executePitchChange = (percentCorrect) => {
+        if (pitchShift) {
+            pitchShift.pitch = 20 - (percentCorrect / 5);
+        }
     };
     // ToDo weiter Funktion, die den Song verändert
-    const executeFunction2 = (percentCorrect, myPlayer, myPitchShift) => {
+    const executeFunction2 = (percentCorrect) => {
         console.log(`Function 2: ${percentCorrect}`);
     };
     // ToDo weiter Funktion, die den Song verändert
-    const executeFunction3 = (percentCorrect, myPlayer, myPitchShift) => {
+    const executeFunction3 = (percentCorrect) => {
         console.log(`Function 3: ${percentCorrect}`);
     };
     // ToDo weiter Funktion, die den Song verändert
-    const executeFunction4 = (percentCorrect, myPlayer, myPitchShift) => {
+    const executeFunction4 = (percentCorrect) => {
         console.log(`Function 4: ${percentCorrect}`);
     };
     // ToDo weiter Funktion, die den Song verändert
-    const executeFunction5 = (percentCorrect, myPlayer, myPitchShift) => {
+    const executeFunction5 = (percentCorrect) => {
         console.log(`Function 5: ${percentCorrect}`);
     };
     // ToDo weiter Funktion, die den Song verändert
-    const executeFunction6 = (percentCorrect, myPlayer, myPitchShift) => {
+    const executeFunction6 = (percentCorrect) => {
         console.log(`Function 6: ${percentCorrect}`);
     };
 
@@ -76,13 +81,15 @@ function App() {
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
     };
 
-    // Laden des ausgewählten Songs
-    const loadSong = (song) => {
+    function loadSong(song) {
         const newPlayer = createPlayer(song);
-        setSelectedSong(song);
         if (player) {
             player.dispose(); // Alten Player entsorgen, um Speicherleck zu vermeiden
         }
+        if (pitchShift) {
+            pitchShift.dispose();// Alten Pitch Shift entsorgen, um Speicherleck zu vermeiden
+        }
+
         setPlayer(newPlayer);
         console.log('Load song', song);
 
@@ -92,15 +99,30 @@ function App() {
         setPitchShift(newPitchShift);
 
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
+    }
 
-        // Funktionen zum Song anpassen ausführen ToDo 100 durch Prozent-Wert der Spalte ersetzen
-        functionsForSongManipulation.forEach((func) => func(100, newPlayer, newPitchShift));
+    // Laden des ausgewählten Songs
+    const loadLevel = (level) => {
+        setSelectedLevel(level);
+
+        const song = level.song;
+        loadSong(song)
+    };
+
+    // Funktionen zum Song anpassen ausführen
+    const changeSolvedTilesInRow = (solvedTilesInRow) => {
+        solvedTilesInRow.forEach((rowPercent, index) => {
+                if (functionsForSongManipulation.length >= index) {
+                    functionsForSongManipulation[index](rowPercent);
+                }
+            }
+        )
     };
 
     return (<div className="container">
         <h1>Welches Lied wird hier abgespielt?</h1>
-        <Grid/>
-        <LevelSelection selectedSong={selectedSong} loadSong={loadSong}/>
+        <Grid selectedGrid={selectedLevel.grid} changeSolvedTilesInRow={changeSolvedTilesInRow}/>
+        <LevelSelection selectedLevel={selectedLevel} loadLevel={loadLevel}/>
         <VolumeSlider volume={volume} handleVolumeChange={handleVolumeChange}/>
     </div>);
 }

@@ -53,9 +53,9 @@ const reverseDirection = {
     'L': 'R'
 };
 
-const Grid = () => {
+//ToDo selectedGrid verwenden
+const Grid = ({selectedGrid: selectedGrid, changeSolvedTilesInRow: changeSolvedTilesInRow}) => {
     const [grid, setGrid] = useState(initialGrid1);
-    const [solvedTilesInRow, setSolvedTilesInRow] = useState(Array(grid.length).fill(0));
 
     const getConnectedTiles = (grid, startX, startY) => {
         const numRows = grid.length;
@@ -114,8 +114,7 @@ const Grid = () => {
             }
         );
         setGrid(coloredGrid);
-        console.log(percentPerRow);
-        setSolvedTilesInRow(percentPerRow);
+        changeSolvedTilesInRow(percentPerRow);
     }
 
     // Call markConnectedTiles on component mount
