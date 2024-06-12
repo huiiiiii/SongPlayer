@@ -14,9 +14,9 @@ function App() {
     const [pitchShift, setPitchShift] = useState(null);
     const [autoWah, setAutoWah] = useState(null);
     const [reverb, setReverb] = useState(null);
-    const [bandpass, setBandpass] = useState(null);
     const [lowpass, setLowpass] = useState(null);
     const [highpass, setHighpass] = useState(null);
+    const [pingPong, setPingPong] = useState(null);
 
     // Starte den Audio-Kontext, falls nicht bereits gestartet
     const startAudioContextIfNeeded = () => {
@@ -50,6 +50,7 @@ function App() {
             player.playbackRate = minSpeed + (percentCorrect / 100) * range;
         }
     };
+
     // Funktion zum Ändern der Tonhöhe zwischen 0 und 20
     const executePitchChange = (percentCorrect) => {
         console.log(`pitchChange: ${percentCorrect}`);
@@ -72,16 +73,6 @@ function App() {
         console.log(`reverb: ${percentCorrect}`);
         if (reverb) {
             reverb.wet.value = 1 - (percentCorrect / 100);
-        }
-    };
-
-    const executeBandpass = (percentCorrect) => {
-        console.log(`bandpass: ${percentCorrect}`);
-        if (bandpass) {
-            const minQ = 0;
-            const maxQ = 7;
-            const range = maxQ - minQ;
-            pitchShift.pitch = maxQ - (percentCorrect / 100) * range;
         }
     };
 
@@ -112,8 +103,15 @@ function App() {
         }
     };
 
+    const executePingPong = (percentCorrect) => {
+        console.log(`pingPong: ${percentCorrect}`);
+        if (pingPong) {
+            pingPong.wet.value = 1 - (percentCorrect / 100);
+        }
+    };
+
     // Erstelle ein Array von Funktionsreferenzen
-    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeAutoWah, executeReverb, executeLowpass, executeHighpass];
+    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeAutoWah, executeReverb, executeLowpass, executeHighpass, executePingPong];
 
     // Funktion zum Ändern der Lautstärke
     const handleVolumeChange = (e) => {
@@ -134,12 +132,14 @@ function App() {
 
     function loadSong(song) {
         const newPlayer = createPlayer(song);
+
         disposeComponent(player);
-        disposeComponent(autoWah)
-        disposeComponent(reverb)
-        disposeComponent(bandpass)
-        disposeComponent(highpass)
-        disposeComponent(lowpass)
+        disposeComponent(pitchShift);
+        disposeComponent(autoWah);
+        disposeComponent(reverb);
+        disposeComponent(highpass);
+        disposeComponent(lowpass);
+        disposeComponent(pingPong);
 
         setPlayer(newPlayer);
 
@@ -159,7 +159,7 @@ function App() {
         // Erstellen des Lowpass-Effekts 
         const newLowpass = new Tone.Filter({
             type: 'lowpass',
-            frequency: 20000,
+            frequency: 220000,
             rolloff: -96,
             Q: 7
         })
@@ -174,25 +174,24 @@ function App() {
         })
         setHighpass(newHighpass)
 
-        // Erstellen des Bandpass-Effekts 
-        const newBandpass = new Tone.Filter({
-            type: 'bandpass',
-            frequency: 10000,
-            Q: 0
-        })
-        setBandpass(newBandpass)
-
-
         // Erstellen des Reverb-Effekts 
         const newReverb = new Tone.Reverb({
-            decay: 20,
+            decay: 10,
             wet: 0
         })
         setReverb(newReverb);
 
+        // Erstellen des PingPong Delays
+        const newPingPong = new Tone.PingPongDelay({
+            delayTime: 0.25,
+            feedback: 0.5,
+            wet: 0
+        })
+        setPingPong(newPingPong);
+
 
         // Verbinden mit dem Player
-        newPlayer.chain(newPitchShift, newAutoWah, newReverb, newLowpass, newHighpass, Tone.Destination);
+        newPlayer.chain(newPitchShift, newAutoWah, newReverb, newLowpass, newHighpass, newPingPong, Tone.Destination);
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
     }
 
@@ -208,11 +207,7 @@ function App() {
     const changeSolvedTilesInRow = (solvedTilesInRow) => {
         solvedTilesInRow.forEach((rowPercent, index) => {
                 if (functionsForSongManipulation.length > index) {
-                    // if (index === 5 || index === 4) {
-                        functionsForSongManipulation[index](rowPercent);
-                    // } else {
-                    //     functionsForSongManipulation[index](100);
-                    // }
+                    functionsForSongManipulation[index](rowPercent);
                 }
             }
         )
