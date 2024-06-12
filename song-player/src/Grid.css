@@ -1,7 +1,7 @@
 /* src/components/Grid.css */
 .grid {
     display: grid;
-    grid-template-columns: repeat(7, 50px);
-    grid-template-rows: repeat(7, 50px);
+    grid-template-columns: repeat(7, 100px);
+    grid-template-rows: repeat(7, 100px);
     gap: 2px;
 }

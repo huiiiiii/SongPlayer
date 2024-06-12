@@ -1,7 +1,7 @@
 /* src/components/PipeTile.css */
 .pipe-tile {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     background-color: lightgray;
     display: flex;
     justify-content: center;
