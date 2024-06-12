@@ -114,8 +114,9 @@ function App() {
         console.log(`highpass: ${percentCorrect}`);
         if (highpass) {
             const minFrequency = 0;
-            const maxFrequency = 10000;
+            const maxFrequency = 300;
             const range = maxFrequency - minFrequency;
+            console.log(`highpass_freq: ${maxFrequency - (percentCorrect / 100) * range}`);
             highpass.frequency.value = maxFrequency - (percentCorrect / 100) * range;
         }
     };
@@ -123,15 +124,16 @@ function App() {
     const executeLowpass = (percentCorrect) => {
         console.log(`lowpass: ${percentCorrect}`);
         if (lowpass) {
-            const minFrequency = 10000;
+            const minFrequency = 300;
             const maxFrequency = 20000;
             const range = maxFrequency - minFrequency;
+            console.log(`lowpass_freq: ${minFrequency + (percentCorrect / 100) * range}`);
             lowpass.frequency.value = minFrequency + (percentCorrect / 100) * range;
         }
     };
 
     // Erstelle ein Array von Funktionsreferenzen
-    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeAutoWah, executeLowpass, executeHighpass, executeReverb, executeReverb];
+    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeAutoWah,executeReverb, executeLowpass, executeHighpass , executeReverb];
 
     // Funktion zum Ändern der Lautstärke
     const handleVolumeChange = (e) => {
@@ -190,7 +192,8 @@ function App() {
         const newLowpass = new Tone.Filter({
             type: 'lowpass',
             frequency: 20000,
-            rolloff: -96
+            rolloff: -96,
+            Q: 5
         })
         setLowpass(newLowpass)
 
@@ -198,7 +201,8 @@ function App() {
         const newHighpass = new Tone.Filter({
             type: 'highpass',
             frequency: 0,
-            rolloff: -96
+            rolloff: -96,
+            Q: 5
         })
         setHighpass(newHighpass)
 
@@ -245,7 +249,7 @@ function App() {
     const changeSolvedTilesInRow = (solvedTilesInRow) => {
         solvedTilesInRow.forEach((rowPercent, index) => {
                 if (functionsForSongManipulation.length >= index) {
-                    if (index === 3 || index === 4) {
+                    if (index === 5 || index === 4) {
                         functionsForSongManipulation[index](rowPercent);
                     } else {
                         functionsForSongManipulation[index](100);
