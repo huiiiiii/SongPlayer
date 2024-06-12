@@ -15,7 +15,6 @@ function App() {
     const [autoWah, setAutoWah] = useState(null);
     const [reverb, setReverb] = useState(null);
     const [bandpass, setBandpass] = useState(null);
-    const [eq3, setEQ3] = useState(null);
     const [lowpass, setLowpass] = useState(null);
     const [highpass, setHighpass] = useState(null);
 
@@ -31,7 +30,7 @@ function App() {
     const createPlayer = (song) => {
         const audioFile = process.env.PUBLIC_URL + '/songs/' + song;
         const newPlayer = new Tone.Player({
-            url: audioFile, 
+            url: audioFile,
             loop: true,
             onload: () => {
                 startAudioContextIfNeeded(); // Starte den Audio-Kontext, wenn der Buffer geladen ist
@@ -69,30 +68,6 @@ function App() {
         }
     };
 
-    const executeEQLow = (percentCorrect) => {
-        console.log(`eqLow: ${percentCorrect}`);
-        if (eq3) {
-            const maxReduction = -50;
-            eq3.low.value = maxReduction * (1 - (percentCorrect / 100));
-        }
-    };
-
-    const executeEQMid = (percentCorrect) => {
-        console.log(`eqMid: ${percentCorrect}`);
-        if (eq3) {
-            const maxReduction = -50;
-            eq3.mid.value = maxReduction * (1 - (percentCorrect / 100));
-        }
-    };
-
-    const executeEQHigh = (percentCorrect) => {
-        console.log(`eqHigh: ${percentCorrect}`);
-        if (eq3) {
-            const maxReduction = -50;
-            eq3.high.value = maxReduction * (1 - (percentCorrect / 100));
-        }
-    };
-
     const executeReverb = (percentCorrect) => {
         console.log(`reverb: ${percentCorrect}`);
         if (reverb) {
@@ -109,7 +84,7 @@ function App() {
             pitchShift.pitch = maxQ - (percentCorrect / 100) * range;
         }
     };
-    
+
     const executeHighpass = (percentCorrect) => {
         console.log(`highpass: ${percentCorrect}`);
         if (highpass) {
@@ -125,15 +100,20 @@ function App() {
         console.log(`lowpass: ${percentCorrect}`);
         if (lowpass) {
             const minFrequency = 300;
-            const maxFrequency = 20000;
-            const range = maxFrequency - minFrequency;
-            console.log(`lowpass_freq: ${minFrequency + (percentCorrect / 100) * range}`);
-            lowpass.frequency.value = minFrequency + (percentCorrect / 100) * range;
+            const maxFrequency = 22000;
+            // Basiswert für die exponentielle Skalierung
+            const exponent = 4;  // Höhere Werte machen die Kurve steiler
+            // Skalierung des Prozentwerts auf eine exponentielle Skala
+            const scaledPercent = Math.pow(percentCorrect / 100, exponent);
+            // Berechnung der Frequenz
+            const frequency = minFrequency + (maxFrequency - minFrequency) * scaledPercent;
+            console.log(`lowpass_freq: ${frequency}`);
+            lowpass.frequency.value = frequency;
         }
     };
 
     // Erstelle ein Array von Funktionsreferenzen
-    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeAutoWah,executeReverb, executeLowpass, executeHighpass , executeReverb];
+    const functionsForSongManipulation = [executeSpeedChange, executePitchChange, executeAutoWah, executeReverb, executeLowpass, executeHighpass];
 
     // Funktion zum Ändern der Lautstärke
     const handleVolumeChange = (e) => {
@@ -145,33 +125,21 @@ function App() {
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
     };
 
+    // Alten Component entsorgen, um Speicherleck zu vermeiden
+    function disposeComponent(component) {
+        if (component) {
+            component.dispose();
+        }
+    }
+
     function loadSong(song) {
         const newPlayer = createPlayer(song);
-        if (player) {
-            player.dispose(); // Alten Player entsorgen, um Speicherleck zu vermeiden
-        }
-        if (pitchShift) {
-            pitchShift.dispose();// Alten Pitch Shift entsorgen, um Speicherleck zu vermeiden
-        }
-        if (autoWah) {
-            autoWah.dispose();// Alten AutoWah entsorgen, um Speicherleck zu vermeiden
-        }
-        if (reverb) {
-            reverb.dispose();// Alten Reverb entsorgen, um Speicherleck zu vermeiden
-        }
-        if (eq3) {
-            eq3.dispose();// Alten bandpass entsorgen, um Speicherleck zu vermeiden
-        }
-        if (bandpass) {
-            bandpass.dispose();// Alten bandpass entsorgen, um Speicherleck zu vermeiden
-        }
-        if (bandpass) {
-            bandpass.dispose();// Alten bandpass entsorgen, um Speicherleck zu vermeiden
-        }
-        if (bandpass) {
-            bandpass.dispose();// Alten bandpass entsorgen, um Speicherleck zu vermeiden
-        }
-
+        disposeComponent(player);
+        disposeComponent(autoWah)
+        disposeComponent(reverb)
+        disposeComponent(bandpass)
+        disposeComponent(highpass)
+        disposeComponent(lowpass)
 
         setPlayer(newPlayer);
 
@@ -206,15 +174,6 @@ function App() {
         })
         setHighpass(newHighpass)
 
-        // Erstellen des EQ-Effekts 
-        const newEQ = new Tone.EQ3({
-            low: 0,
-            mid: 0,
-            high: 0,
-            Q: 1000
-        })
-        setEQ3(newEQ)
-
         // Erstellen des Bandpass-Effekts 
         const newBandpass = new Tone.Filter({
             type: 'bandpass',
@@ -248,7 +207,7 @@ function App() {
     // Funktionen zum Song anpassen ausführen
     const changeSolvedTilesInRow = (solvedTilesInRow) => {
         solvedTilesInRow.forEach((rowPercent, index) => {
-                if (functionsForSongManipulation.length >= index) {
+                if (functionsForSongManipulation.length > index) {
                     if (index === 5 || index === 4) {
                         functionsForSongManipulation[index](rowPercent);
                     } else {
