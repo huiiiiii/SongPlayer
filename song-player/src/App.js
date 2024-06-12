@@ -7,7 +7,7 @@ import Grid from "./Grid";
 
 
 function App() {
-    const [volume, setVolume] = useState(0);
+    const [volume, setVolume] = useState(-10);
     const [selectedLevel, setSelectedLevel] = useState({id: 'default', song: '', grid: []});
     const [player, setPlayer] = useState(null);
     const [audioContextStarted, setAudioContextStarted] = useState(false);
@@ -125,7 +125,7 @@ function App() {
         startAudioContextIfNeeded(); // Starte den Audio-Kontext bei Benutzerinteraktion
     };
 
-    // Alten Component entsorgen, um Speicherleck zu vermeiden
+    // Alte Component entsorgen, um Speicherleck zu vermeiden
     function disposeComponent(component) {
         if (component) {
             component.dispose();
@@ -161,7 +161,7 @@ function App() {
             type: 'lowpass',
             frequency: 20000,
             rolloff: -96,
-            Q: 5
+            Q: 7
         })
         setLowpass(newLowpass)
 
@@ -170,7 +170,7 @@ function App() {
             type: 'highpass',
             frequency: 0,
             rolloff: -96,
-            Q: 5
+            Q: 7
         })
         setHighpass(newHighpass)
 
@@ -208,11 +208,11 @@ function App() {
     const changeSolvedTilesInRow = (solvedTilesInRow) => {
         solvedTilesInRow.forEach((rowPercent, index) => {
                 if (functionsForSongManipulation.length > index) {
-                    if (index === 5 || index === 4) {
+                    // if (index === 5 || index === 4) {
                         functionsForSongManipulation[index](rowPercent);
-                    } else {
-                        functionsForSongManipulation[index](100);
-                    }
+                    // } else {
+                    //     functionsForSongManipulation[index](100);
+                    // }
                 }
             }
         )
