@@ -423,7 +423,7 @@ export const initialGrid4 = [
         {type: 'elbow', rotation: 270}
     ],
     [
-        {type: 'straight', rotation: 90},
+        {type: 't', rotation: 90},
         {type: 'elbow', rotation: 180},
         {type: 'end', rotation: 270},
         {type: 'elbow', rotation: 0},
